@@ -1,16 +1,19 @@
 import numpy as np
 import pandas as pd
 
-__all__ = ['normal_loss', 'l1loss', 'l2loss']
+__all__ = ['normal_loss', 'mean_absolute_error', 'mean_squared_error']
 
-def normal_loss(y_true, y_pred, k, log=False):
+def normal_loss(y_true, y_pred, k, log=False, root=False):
     if log:
-        return np.power((np.log1p(y_true)-np.log1p(y_pred)).abs().pow(k).sum(), 1/k)
+        loss = (np.log1p(y_true)-np.log1p(y_pred)).abs().pow(k).mean()
     else:
-        return np.power((y_true-y_pred).abs().pow(k).sum(), 1/k)
+        loss = (y_true-y_pred).abs().pow(k).mean()
+    if root:
+        loss = np.sqrt(loss, 1/k)
+    return loss
 
-def l1loss(y_true, y_pred, log=False):
-    return normal_loss(y_true, y_pred, k=1, log=log)
+def mean_absolute_error(y_true, y_pred, log=False, root=False):
+    return normal_loss(y_true, y_pred, k=1, log=log, root=root)
 
-def l2loss(y_true, y_pred, log=False):
-    return normal_loss(y_true, y_pred, k=2, log=log)
+def mean_squared_error(y_true, y_pred, log=False, root=False):
+    return normal_loss(y_true, y_pred, k=2, log=log, root=root)
