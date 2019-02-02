@@ -1,7 +1,8 @@
 import numpy as np
 import pandas as pd
 
-__all__ = ['accuracy', 'recall', 'precision', 'auc', 'sigmoid_crossentropy',
+__all__ = ['accuracy', 'recall', 'precision', 'fbeta_score', 'f1_score',
+           'auc', 'sigmoid_crossentropy',
            'softmax_crossentropy']
 
 def accuracy(y_true, y_pred):
@@ -12,7 +13,15 @@ def recall(y_true, y_pred, label=1):
 
 def precision(y_true, y_pred, label=1):
     return np.mean(y_true[y_pred==label].index==y_pred[y_pred==label].index)
-    
+
+def fbeta_score(y_true, y_pred, beta, label=1):
+    r = recall(y_true, y_pred, label)
+    p = precision(y_true, y_pred, label)
+    return r*p*(1+np.power(beta, 2))/(np.power(beta, 2)*p+r)
+
+def f1_score(y_true, y_pred, label=1):
+    return fbeta_score(y_true, y_pred, beta=1, label=label)
+
 def auc(y_true, y_pred, label=1):
     assert y_true.nunique()==2, "`y_true` should be binary classification."
     t = pd.concat([y_true, y_pred], axis=1)
