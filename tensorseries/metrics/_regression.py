@@ -12,5 +12,5 @@ def normal_loss(y_true, y_pred, k, log=False):
 def l1loss(y_true, y_pred, log=False):
     return normal_loss(y_true, y_pred, k=1, log=log)
 
-def l2loss(y_true, y_pred):
+def l2loss(y_true, y_pred, log=False):
     return normal_loss(y_true, y_pred, k=2, log=log)
