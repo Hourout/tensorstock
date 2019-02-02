@@ -1,7 +1,8 @@
 import numpy as np
 import pandas as pd
 
-__all__ = ['accuracy', 'recall', 'precision', 'auc']
+__all__ = ['accuracy', 'recall', 'precision', 'auc', 'sigmoid_crossentropy',
+           'softmax_crossentropy']
 
 def accuracy(y_true, y_pred):
     return (x_true==y_pred).mean()
@@ -20,3 +21,17 @@ def auc(y_true, y_pred, label=1):
     t = t[t.label!=label].merge(t[t.label==label], on='target')
     auc = (t.prob_y>t.prob_x).mean()+(t.prob_y==t.prob_x).mean()/2
     return auc    
+
+def sigmoid_crossentropy(y_true, y_pred):
+    t = np.exp(y_pred-np.max(y_pred))
+    t = -(np.log(t/t.sum())*y_true).mean()
+    return t
+
+def softmax_crossentropy(y_true, y_pred, one_hot=True):
+    assert y_pred.shape[1]==y_true.nunique(), "`y_pred` and `y_true` dim not same."
+    t = np.exp(y_pred.T-np.max(y_pred, axis=1))
+    if one_hot:
+        t = -(np.log(t/np.sum(t, axis=0)).T*pd.get_dummies(y_true)).sum(axis=1).mean()
+    else:
+        t = -(np.log(t/np.sum(t, axis=0)).T*y_true).sum(axis=1).mean()
+    return t
