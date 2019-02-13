@@ -6,13 +6,13 @@ __all__ = ['accuracy', 'recall', 'precision', 'fbeta_score', 'f1_score',
            'softmax_crossentropy']
 
 def accuracy(y_true, y_pred):
-    return (x_true==y_pred).mean()
+    return (y_true==y_pred).mean()
 
 def recall(y_true, y_pred, label=1):
-    return np.mean(y_true[y_true==label].index==y_pred[y_true==label].index)
+    return y_pred[y_true==label].mean()
 
 def precision(y_true, y_pred, label=1):
-    return np.mean(y_true[y_pred==label].index==y_pred[y_pred==label].index)
+    return y_true[y_pred==label].mean()
 
 def fbeta_score(y_true, y_pred, beta, label=1):
     r = recall(y_true, y_pred, label)
@@ -36,7 +36,7 @@ def auc_pr(y_true, y_pred, label=1, prob=0.5):
     assert t.label.nunique()==2, "`y_true` should be binary classification."
     label_dict = {i:1 if i==label else 0 for i in t.label.unique()}
     t['label'] = t.label.replace(label_dict)
-    t = t.sort_values(['prob', 'label'], ascending=False).reset_index(drop=True)   
+    t = t.sort_values(['prob'], ascending=False).reset_index(drop=True)   
     t['tp'] = t.label.cumsum()
     t['fp'] = t.index+1-t.tp
     t['recall'] = t.tp/t.label.sum()
