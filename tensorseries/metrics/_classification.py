@@ -3,7 +3,7 @@ import pandas as pd
 
 __all__ = ['accuracy', 'recall', 'precision', 'fbeta_score', 'f1_score',
            'auc_roc', 'auc_pr', 'sigmoid_crossentropy',
-           'softmax_crossentropy']
+           'softmax_crossentropy', 'ks']
 
 def accuracy(y_true, y_pred):
     return (y_true==y_pred).mean()
@@ -57,3 +57,16 @@ def softmax_crossentropy(y_true, y_pred, one_hot=True):
     else:
         t = -(np.log(t/np.sum(t, axis=0)).T*y_true).sum(axis=1).mean()
     return t
+
+def ks(y_true, y_pred, label=1, prob=0.5):
+    t = pd.DataFrame({'prob':y_pred, 'label':y_true})
+    assert t.label.nunique()==2, "`y_true` should be binary classification."
+    label_dict = {i:1 if i==label else 0 for i in t.label.unique()}
+    t['label'] = t.label.replace(label_dict)
+    t = t.sort_values(['prob'], ascending=False).reset_index(drop=True)   
+    t['tp'] = t.label.cumsum()
+    t['fp'] = t.index+1-t.tp
+    t['tpr'] = t.tp/t.label.sum()
+    t['fpr'] = t.fp/(t.label.count()-t.label.sum())
+    ks = (t.tpr-t.fpr).max()
+    return ks
