@@ -68,5 +68,5 @@ def ks(y_true, y_pred, label=1, prob=0.5):
     t['fp'] = t.index+1-t.tp
     t['tpr'] = t.tp/t.label.sum()
     t['fpr'] = t.fp/(t.label.count()-t.label.sum())
-    ks = (t.tpr-t.fpr).max()
+    ks = (t.tpr-t.fpr).abs().max()
     return ks
