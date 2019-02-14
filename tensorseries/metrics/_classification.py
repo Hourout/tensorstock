@@ -3,7 +3,7 @@ import pandas as pd
 
 __all__ = ['accuracy', 'recall', 'precision', 'fbeta_score', 'f1_score',
            'auc_roc', 'auc_pr', 'sigmoid_crossentropy',
-           'softmax_crossentropy', 'ks']
+           'softmax_crossentropy', 'ks', 'gini']
 
 def accuracy(y_true, y_pred):
     return (y_true==y_pred).mean()
@@ -70,3 +70,12 @@ def ks(y_true, y_pred, label=1, prob=0.5):
     t['fpr'] = t.fp/(t.label.count()-t.label.sum())
     ks = (t.tpr-t.fpr).abs().max()
     return ks
+
+def gini(y_true, y_pred, label=1):
+    t = pd.DataFrame({'prob':y_pred, 'label':y_true})
+    assert t.label.nunique()==2, "`y_true` should be binary classification."
+    label_dict = {i:1 if i==label else 0 for i in t.label.unique()}
+    t['label'] = t.label.replace(label_dict)
+    t = t.sort_values(['prob', 'label'], ascending=False).reset_index(drop=True)
+    gini = (t.label.cumsum().sum()/t.label.sum()-(t.label.count()+1)/2)/t.label.count()
+    return gini
