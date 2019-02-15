@@ -2,7 +2,8 @@ import numpy as np
 import pandas as pd
 import pyecharts as pe
 
-__all__ = ['ks_curve', 'roc_curve', 'pr_curve', 'lift_curve', 'gain_curve', 'gini_curve']
+__all__ = ['ks_curve', 'roc_curve', 'pr_curve', 'lift_curve', 'gain_curve', 'gini_curve',
+           'confusion_matrix_map']
 
 def ks_curve(y_true, y_pred, pos_label=1, jupyter=True, path='Kolmogorov-Smirnov Curve.html'):
     t = pd.DataFrame({'prob':y_pred, 'label':y_true})
@@ -110,3 +111,14 @@ def gini_curve(y_true, y_pred, pos_label=1, jupyter=True, path='Gini Curve.html'
              is_fill=True, area_opacity=0.4,
              is_smooth=True, yaxis_type='value', xaxis_type='value')
     return line if jupyter else line.render(path)
+
+def confusion_matrix_map(y_true, y_pred, jupyter=True, path="Confusion Matrix Map.html"):
+    t = confusion_matrix(y_true, y_pred)
+    t = pd.DataFrame([[i, m,n ] for i,j in t.to_dict().items() for m, n in j.items()],
+                     columns=['actual', 'predict', 'over_values'])
+    print(t.drop_duplicates(['actual']))
+    heatmap = pe.HeatMap("Confusion Matrix Map")
+    heatmap.add("Confusion Matrix", t.drop_duplicates(['actual']).actual.values, t.drop_duplicates(['predict']).predict.values,
+                t.values, is_visualmap=True, xaxis_name='Actual', yaxis_name='Predict',
+                visual_text_color="#000", visual_orient="horizontal", visual_range=[0, t.over_values.max()])
+    return  heatmap if jupyter else heatmap.render(path)
