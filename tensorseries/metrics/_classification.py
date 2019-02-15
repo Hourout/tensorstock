@@ -2,7 +2,8 @@ import numpy as np
 import pandas as pd
 
 __all__ = ['binary_accuracy', 'categorical_accuracy', 'recall', 'precision', 'fbeta_score', 'f1_score',
-           'auc_roc', 'auc_pr', 'binary_crossentropy', 'categorical_crossentropy', 'ks', 'gini']
+           'auc_roc', 'auc_pr', 'binary_crossentropy', 'categorical_crossentropy', 'ks', 'gini',
+           'psi']
 
 def binary_accuracy(y_true, y_pred, prob=0.5):
     t = pd.DataFrame({'prob':y_pred, 'label':y_true})
@@ -88,3 +89,14 @@ def gini(y_true, y_pred, pos_label=1):
     t = t.sort_values(['prob', 'label'], ascending=False).reset_index(drop=True)
     gini = (t.label.cumsum().sum()/t.label.sum()-(t.label.count()+1)/2)/t.label.count()
     return gini
+
+def psi(y_true, y_pred, threshold):
+    actual = (y_true-y_true.min())/(y_true.max()-y_true.min())
+    predict = (y_pred-y_pred.min())/(y_pred.max()-y_pred.min())
+    actual = pd.cut(actual, threshold, labels=range(1, len(threshold))).value_counts(normalize=True).reset_index()
+    actual.columns = ['label', 'prob1']
+    predict = pd.cut(predict, threshold, labels=range(1, len(threshold))).value_counts(normalize=True).reset_index()
+    predict.columns = ['label', 'prob2']
+    predict = actual.merge(predict, on='label', how='outer')
+    psi = ((predict.prob1-predict.prob2)*np.log((predict.prob1/(predict.prob2+0.00000001)))).sum()
+    return psi
