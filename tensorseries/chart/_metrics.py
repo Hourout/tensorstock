@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import pyecharts as pe
 
-__all__ = ['ks_curve', 'roc_curve', 'pr_curve', 'lift_curve', 'gain_curve']
+__all__ = ['ks_curve', 'roc_curve', 'pr_curve', 'lift_curve', 'gain_curve', 'gini_curve']
 
 def ks_curve(y_true, y_pred, label=1, jupyter=True, path='Kolmogorov-Smirnov Curve.html'):
     t = pd.DataFrame({'prob':y_pred, 'label':y_true})
@@ -90,5 +90,23 @@ def gain_curve(y_true, y_pred, label=1, jupyter=True, path='Gain Curve.html'):
     print(t)
     line = pe.Line("Gain Curve")
     line.add("Gain", t.index.tolist(), t.precision.round(4).tolist(),
+             is_smooth=True, yaxis_type='value', xaxis_type='value')
+    return line if jupyter else line.render(path)
+
+def gini_curve(y_true, y_pred, label=1, jupyter=True, path='Gini Curve.html'):
+    t = pd.DataFrame({'prob':y_pred, 'label':y_true})
+    assert t.label.nunique()==2, "`y_true` should be binary classification."
+    label_dict = {i:1 if i==label else 0 for i in t.label.unique()}
+    t['label'] = t.label.replace(label_dict)
+    t = t.sort_values(['prob', 'label']).reset_index(drop=True)
+    t['cum'] = t.label.cumsum()/t.label.sum()
+    t.index = np.round(((t.index+1)/len(t)), 2)
+    print(t)
+    line = pe.Line("Gini Curve")
+    line.add("Random", [0]+t.index.tolist(), [0]+t.index.tolist(),
+             is_fill=True, area_opacity=0.4,
+             is_smooth=True, yaxis_type='value', xaxis_type='value')
+    line.add("Gini", [0]+t.index.tolist(), [0]+t.cum.round(4).tolist(),
+             is_fill=True, area_opacity=0.4,
              is_smooth=True, yaxis_type='value', xaxis_type='value')
     return line if jupyter else line.render(path)
