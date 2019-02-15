@@ -1,9 +1,9 @@
 import numpy as np
 import pandas as pd
 
-__all__ = ['binary_accuracy', 'categorical_accuracy', 'recall', 'precision', 'fbeta_score', 'f1_score',
-           'auc_roc', 'auc_pr', 'binary_crossentropy', 'categorical_crossentropy', 'ks', 'gini',
-           'psi']
+__all__ = ['binary_accuracy', 'categorical_accuracy', 'recall', 'precision', 'confusion_matrix',
+           'fbeta_score', 'f1_score', 'auc_roc', 'auc_pr', 'binary_crossentropy', 
+           'categorical_crossentropy', 'ks', 'gini', 'psi']
 
 def binary_accuracy(y_true, y_pred, prob=0.5):
     t = pd.DataFrame({'prob':y_pred, 'label':y_true})
@@ -23,6 +23,11 @@ def recall(y_true, y_pred, pos_label=1):
 
 def precision(y_true, y_pred, pos_label=1):
     return y_true[y_pred==pos_label].mean()
+
+def confusion_matrix(y_true, y_pred):
+    t = pd.DataFrame({'actual':y_true, 'predict':y_pred})
+    t = pd.crosstab(t.predict, t.actual)
+    return t
 
 def fbeta_score(y_true, y_pred, beta, pos_label=1):
     r = recall(y_true, y_pred, pos_label)
