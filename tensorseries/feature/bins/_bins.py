@@ -51,7 +51,7 @@ def chi_square_interval(feature, label, max_interval=5):
     t, bins = pd.cut(feature, t.feature.values, labels=range(t.feature.count()-1), retbins=True)
     return t, bins
 
-def chi_square_threshold(feature, label, dfree=4, cf=0.1, min_interval=4):
+def chi_square_threshold(feature, label, dfree=1, cf=0.1, min_interval=4):
     t = pd.DataFrame({'label':label, 'feature':feature})
     rate = label.sum()/label.count()
     t = t.groupby(['feature']).label.agg(['count', 'sum']).reset_index()
