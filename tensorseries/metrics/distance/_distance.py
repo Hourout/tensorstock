@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 __all__ = ['euclidean', 'manhattan', 'chebyshev', 'minkowski, 'hamming',
-           'jaccard', 'pearson'
+           'jaccard', 'pearson', 'cosine'
           ]
 
 def euclidean(x, y, normalize=False):
@@ -31,3 +31,5 @@ def pearson(x, y):
     d2 = np.sqrt(np.sum(np.square(x-x_mean)))*np.sqrt(np.sum(np.square(y-y_mean)))
     return 1-d/d2
 
+def cosine(x, y):
+    return (x*y).sum()/np.sqrt(np.square(x).sum())/np.sqrt(np.square(y).sum())
