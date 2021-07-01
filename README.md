@@ -1,1 +1,1 @@
-# tensorseries
+# tensorstock
