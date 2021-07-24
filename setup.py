@@ -7,11 +7,14 @@ def readme():
 
 setup(name='tensorstock',
       version='0.1.0',
-      install_requires=['linora>=1.0.0'],
+      install_requires=[
+          'linora>=1.0.0',
+          'pyecharts>=1.9.0'
+      ],
       description='',
       long_description=readme(),
       long_description_content_type='text/markdown',
-      url='https://github.com/Hourout/tensorseries',
+      url='https://github.com/Hourout/tensorstock',
       author='JinQing Lee',
       author_email='hourout@163.com',
       keywords=['stock'],
