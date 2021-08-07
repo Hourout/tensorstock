@@ -17,12 +17,10 @@ def KDJ(data, N=9, M=2):
     kdj_j = 3.0 * kdj_k - 2.0 * kdj_d
     return {'kdj_k':kdj_k, 'kdj_d':kdj_d, 'kdj_j':kdj_j}
 
-def BIAS(series, N1, N2, N3):
+def BIAS(series, window):
     """乖离率，描述收盘价距离均线的百分比，常用来衡量收盘价偏离程度。"""
-    bias1 = (series - series.rolling(N1).mean())/series.rolling(N1).mean() * 100
-    bias2 = (series - series.rolling(N2).mean())/series.rolling(N2).mean() * 100
-    bias3 = (series - series.rolling(N3).mean())/series.rolling(N3).mean() * 100
-    return {'bias1':bias1, 'bias2':bias2, 'bias3':bias3}
+    bias = (series - series.rolling(window).mean())/series.rolling(window).mean() * 100
+    return bias
 
 def BBANDS(series, window):
     middleband = series.rolling(window).mean()
@@ -30,14 +28,11 @@ def BBANDS(series, window):
     lowerband = middleband - 2 * series.rolling(window).std()
     return {'middleband':middleband, 'upperband':upperband, 'lowerband':lowerband}
 
-def RSI(series, N1, N2, N3):
+def RSI(series, N):
     ''' 计算RSI相对强弱指数'''
     diff = series.diff().fillna(0)
-    x = diff.clip(lower=0)
-    rsi1 = x.ewm(alpha=1 / N1, adjust=False).mean() / (diff.abs().ewm(alpha=1/N1, adjust=False).mean()) * 100
-    rsi2 = x.ewm(alpha=1 / N2, adjust=False).mean() / (diff.abs().ewm(alpha=1 / N2, adjust=False).mean()) * 100
-    rsi3 = x.ewm(alpha=1 / N3, adjust=False).mean() / (diff.abs().ewm(alpha=1 / N3, adjust=False).mean()) * 100
-    return {'rsi1':rsi1, 'rsi2':rsi2, 'rsi3':rsi3}
+    rsi = diff.clip(lower=0).ewm(alpha=1/N, adjust=False).mean()/(diff.abs().ewm(alpha=1/N, adjust=False).mean())*100
+    return rsi
 
 def WR(data, window):
     '''计算威廉指数'''
