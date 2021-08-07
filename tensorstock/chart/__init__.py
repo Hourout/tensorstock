@@ -1,1 +1,1 @@
-from tensorstock._kline import *
+from tensorstock.chart._kline import *
