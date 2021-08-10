@@ -7,7 +7,7 @@ class Feature():
         self.feature = df
         self._feature(self.feature)
         self.columns_translation = columns_translation
-        sef.columns_explain = columns_explain
+        self.columns_explain = columns_explain
         
     def _feature(self, df):
         df = df.rename(columns={'日期':'date', '开盘':'open', '收盘':'close', '最高':'highest', '最低':'lowest', 
