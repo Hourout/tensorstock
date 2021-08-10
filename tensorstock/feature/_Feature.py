@@ -4,8 +4,7 @@ __all__ = ['Feature']
 
 class Feature():
     def __init__(self, df):
-        self.feature = df
-        self._feature(self.feature)
+        self.feature = self._feature(df)
         self.columns_translation = columns_translation
         self.columns_explain = columns_explain
         
@@ -16,3 +15,4 @@ class Feature():
         df['solid_rate'] = (df.close-df.open)/(df.highest-df.lowest)
         df['shadow_down_rate'] = (df[['open', 'close']].min(axis=1)-df.lowest)/(df.highest-df.lowest)
         df['shadow_up_rate'] = (df.highest-df[['open', 'close']].max(axis=1))/(df.highest-df.lowest)
+        return df
