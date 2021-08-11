@@ -7,12 +7,18 @@ columns_translation = {
     'volume': '成交量',
     'turnover': '成交额',
     'amplitude': '振幅',
-    'change_rate': '涨跌幅',
+    'change_open_rate': '开盘涨跌幅',
+    'change_close_rate': '收盘涨跌幅',
+    'change_highest_rate': '最高涨跌幅',
+    'change_lowest_rate': '最低涨跌幅',
     'change_amount': '涨跌额',
     'turnover_rate': '换手率',
     'solid_rate':'实心率',
     'shadow_down_rate':'下影线率',
-    'shadow_up_rate':'上影线率'
+    'shadow_up_rate':'上影线率',
+    'centroid_true_price':'实质心价格',
+    'centroid_false_price':'虚质心价格',
+    'momentum_up_rate':'动量上涨率',
 }
 
 columns_explain = {
@@ -24,10 +30,16 @@ columns_explain = {
     'volume': '成交量，单位: 股',
     'turnover': '成交额，单位: 元',
     'amplitude': '振幅，（最高价-最低价）/上一日收盘价',
-    'change_rate': '涨跌幅，（收盘价-上一日收盘价）/上一日收盘价',
+    'change_open_rate': '开盘涨跌幅，（开盘价-上一日收盘价）/上一日收盘价',
+    'change_close_rate': '收盘涨跌幅，（收盘价-上一日收盘价）/上一日收盘价',
+    'change_highest_rate': '最高涨跌幅，（最高价-上一日收盘价）/上一日收盘价',
+    'change_lowest_rate': '最低涨跌幅，（最低价-上一日收盘价）/上一日收盘价',
     'change_amount': '涨跌额，收盘价-上一日收盘价',
     'turnover_rate': '换手率，成交量/流动股本',
     'solid_rate':'实心率，（收盘价-开盘价）/（最高价-最低价）',
     'shadow_down_rate':'下影线率，(min(收盘价,开盘价)-最低价)/（最高价-最低价）',
-    'shadow_up_rate':'上影线率，(最高价-max(收盘价,开盘价))/（最高价-最低价）'
+    'shadow_up_rate':'上影线率，(最高价-max(收盘价,开盘价))/（最高价-最低价）',
+    'centroid_true_price':'实质心价格，（收盘价+开盘价）/2',
+    'centroid_false_price':'虚质心价格，（最高价+最低价）/2',
+    'momentum_up_rate':'动量上涨率，max(1, min(最高价-上一日收盘价, 0)/(最高价-最低价))'
 }
