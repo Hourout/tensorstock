@@ -19,6 +19,6 @@ class Feature():
         df['centroid_true_price'] = (df.close+df.open)/2
         df['centroid_false_price'] = (df.highest+df.lowest)/2
         df['change_open_rate'] = ((df.open-(df.close-df.change_amount))/(df.close-df.change_amount)).round(3)
-        df['change_highest_rate'] = ((df.highest-(df.close-df.change_amount))/(df.close-df.change_amount)).round(3)
-        df['change_lowest_rate'] = ((df.lowest-(df.close-df.change_amount))/(df.close-df.change_amount)).round(3)
+        df['change_highest_rate'] = ((df.highest-(df.close-df.change_amount))/(df.close-df.change_amount)*100).round(3)
+        df['change_lowest_rate'] = ((df.lowest-(df.close-df.change_amount))/(df.close-df.change_amount)*100).round(3)
         return df
